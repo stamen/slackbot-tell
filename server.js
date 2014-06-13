@@ -69,7 +69,7 @@ app.post("/", function(req, res, next) {
                         verbs[0],
                         verbs[1],
                         what.slice(0, when.index - 1) + what.slice(when.index + when.text.length)),
-      score = when.startDate.getTime() + TZ_OFFSET;
+      score = when.startDate.getTime() + TZ_OFFSET * 60 * 1000;
 
   console.log("who:", who);
   console.log("what:", msg);
