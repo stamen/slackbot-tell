@@ -19,6 +19,17 @@ var REDIS_KEY = "reminders",
       "/ask": ["told", "ask"]
     };
 
+moment.lang("en", {
+  calendar : {
+    lastDay: "[yesterday at] LT",
+    sameDay: "[today at] LT",
+    nextDay: "[tomorrow at] LT",
+    lastWeek: "[last] dddd [at] LT",
+    nextWeek: "dddd [at] LT",
+    sameElse: "L"
+  }
+});
+
 setInterval(function() {
   console.log("now:", new Date().getTime());
   return client.zrangebyscore(REDIS_KEY, 0, new Date().getTime(), function(err, data) {
@@ -88,7 +99,7 @@ app.post("/", function(req, res, next) {
       return next(err);
     }
 
-    return res.send(201, util.format("Ok, I'll %s %s %s at %s.",
+    return res.send(201, util.format("Ok, I'll %s %s %s %s.",
                                      verbs[1],
                                      who,
                                      body,
