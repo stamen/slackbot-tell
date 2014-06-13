@@ -1,0 +1,12 @@
+{
+  "name": "slackbot-tell",
+  "version": "0.0.0",
+  "description": "Slackbot reminders for other people",
+  "author": "Seth Fitzsimmons <seth@mojodna.net>",
+  "license": "ISC",
+  "dependencies": {
+    "chrono-node": "^0.1.8",
+    "express": "^4.4.3",
+    "redis-url": "^0.2.0"
+  }
+}
