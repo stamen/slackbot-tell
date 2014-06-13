@@ -4,12 +4,15 @@ var util = require("util");
 
 var bodyParser = require("body-parser"),
     chrono = require("chrono-node"),
-    express = require("express");
+    express = require("express"),
+    tz = require("moment-timezone");
 
 var app = express(),
     client = require("redis-url").connect();
 
 var REDIS_KEY = "reminders",
+    TZ = "America/Los_Angeles", // TODO look this up per user
+    TZ_OFFSET = tz.tz(TZ)._offset,
     VERBS = {
       "/tell": ["asked", "tell"],
       "/ask": ["told", "ask"]
@@ -35,7 +38,7 @@ app.post("/", function(req, res, next) {
   var parts = req.body.text.split(" "),
       who = parts.shift(),
       what = parts.join(" "),
-      when = chrono.parse(what)[0],
+      when = chrono.parse(what, new Date(), TZ_OFFSET)[0],
       by = req.body.user_name,
       verbs = VERBS[req.body.command];
 
