@@ -104,7 +104,7 @@ app.post("/", function(req, res, next) {
                                      verbs[1],
                                      who,
                                      body,
-                                     moment(score).calendar()));
+                                     moment(score).zone(TZ_OFFSET).calendar()));
   });
 });
 
