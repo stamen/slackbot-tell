@@ -76,6 +76,10 @@ app.use(bodyParser.urlencoded());
 app.post("/", function(req, res, next) {
   // TODO validate token (as a filter)
 
+  if (req.body.text === "") {
+    return res.send("To have me tell someone something for you, /tell <who> <what> <when>");
+  }
+
   var parts = req.body.text.split(" "),
       who = parts.shift(),
       what = parts.join(" "),
