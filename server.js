@@ -20,13 +20,27 @@ var REDIS_KEY = "reminders",
 
 setInterval(function() {
   console.log("now:", new Date().getTime());
-  return client.zrangebyscore(REDIS_KEY, 0, new Date().getTime(), function(err, reply) {
+  return client.zrangebyscore(REDIS_KEY, 0, new Date().getTime(), function(err, data) {
     if (err) {
       console.warn(err.stack);
       return;
     }
 
-    console.log(reply);
+    data.forEach(function(x) {
+      var reminder;
+
+      try {
+        reminder = JSON.parse(x);
+      } catch (err) {
+        console.warn(err.stack);
+        return;
+      }
+
+      console.log(reminder);
+      client.zrem(REDIS_KEY, x, function(err, reply) {
+        console.log(arguments);
+      });
+    });
   });
 }, 60e3).unref();
 
