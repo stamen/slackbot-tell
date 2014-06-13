@@ -55,22 +55,18 @@ setInterval(function() {
         uri: "https://slack.com/api/chat.postMessage",
         qs: {
           token: SLACK_TOKEN,
-          channel: "U024F3JKZ",
+          channel: reminder.who,
           text: reminder.what,
           username: "slackbot"
         }
-      }, function(err, rsp, body) {
+      }, function(err) {
         if (err) {
           console.warn(err.stack);
+          return;
         }
-
-        console.log(body);
       });
 
-      console.log(reminder);
-      client.zrem(REDIS_KEY, x, function(err, reply) {
-        console.log(arguments);
-      });
+      client.zrem(REDIS_KEY, x);
     });
   });
 }, 60e3).unref();
@@ -89,6 +85,14 @@ app.post("/", function(req, res, next) {
 
   if (who === "me") {
     who = by;
+  }
+
+  if (who.charAt(0) !== "@") {
+    who = "@" + who;
+  }
+
+  if (by.charAt(0) !== "@") {
+    by = "@" + by;
   }
 
   if (!when) {
