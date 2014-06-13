@@ -4,14 +4,17 @@ var util = require("util");
 
 var bodyParser = require("body-parser"),
     chrono = require("chrono-node"),
+    env = require("require-env"),
     express = require("express"),
     moment = require("moment"),
+    request = require("request"),
     tz = require("moment-timezone");
 
 var app = express(),
     client = require("redis-url").connect();
 
 var REDIS_KEY = "reminders",
+    SLACK_TOKEN = env.require("SLACK_TOKEN"),
     TZ = "America/Los_Angeles", // TODO look this up per user
     TZ_OFFSET = tz.tz(TZ)._offset,
     VERBS = {
@@ -32,7 +35,6 @@ moment.lang("en-custom", {
 });
 
 setInterval(function() {
-  console.log("now:", new Date().getTime());
   return client.zrangebyscore(REDIS_KEY, 0, new Date().getTime(), function(err, data) {
     if (err) {
       console.warn(err.stack);
@@ -48,6 +50,22 @@ setInterval(function() {
         console.warn(err.stack);
         return;
       }
+
+      request.get({
+        uri: "https://slack.com/api/chat.postMessage",
+        qs: {
+          token: SLACK_TOKEN,
+          channel: "U024F3JKZ",
+          text: reminder.what,
+          username: "slackbot"
+        }
+      }, function(err, rsp, body) {
+        if (err) {
+          console.warn(err.stack);
+        }
+
+        console.log(body);
+      });
 
       console.log(reminder);
       client.zrem(REDIS_KEY, x, function(err, reply) {
@@ -74,7 +92,7 @@ app.post("/", function(req, res, next) {
   }
 
   if (!when) {
-    return res.send("um, couldn't figure out when you meant");
+    return res.send("Um, I couldn't figure out when you meant.");
   }
 
   var body = what.slice(0, when.index - 1) + what.slice(when.index + when.text.length),
