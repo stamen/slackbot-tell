@@ -5,6 +5,7 @@ var util = require("util");
 var bodyParser = require("body-parser"),
     chrono = require("chrono-node"),
     express = require("express"),
+    moment = require("moment"),
     tz = require("moment-timezone");
 
 var app = express(),
@@ -64,17 +65,13 @@ app.post("/", function(req, res, next) {
     return res.send("um, couldn't figure out when you meant");
   }
 
-  var msg = util.format("%s %s me to %s you %s",
+  var body = what.slice(0, when.index - 1) + what.slice(when.index + when.text.length),
+      msg = util.format("%s %s me to %s you %s",
                         by,
                         verbs[0],
                         verbs[1],
-                        what.slice(0, when.index - 1) + what.slice(when.index + when.text.length)),
+                        body),
       score = when.startDate.getTime() + TZ_OFFSET * 60 * 1000;
-
-  console.log("who:", who);
-  console.log("what:", msg);
-  console.log("when:", when);
-  console.log("score:", score, new Date(score));
 
   var reminder = {
     who: who,
@@ -86,12 +83,16 @@ app.post("/", function(req, res, next) {
   return client.zadd(REDIS_KEY,
                      score,
                      JSON.stringify(reminder),
-                     function(err, reply) {
+                     function(err) {
     if (err) {
       return next(err);
     }
 
-    return res.send(201);
+    return res.send(201, util.format("Ok, I'll %s %s %s at %s.",
+                                     verbs[1],
+                                     who,
+                                     body,
+                                     moment(score).calendar());
   });
 });
 
