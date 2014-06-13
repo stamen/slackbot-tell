@@ -19,25 +19,15 @@ var REDIS_KEY = "reminders",
       "/ask": ["told", "ask"]
     };
 
-moment.lang("en", {
+moment.lang("en-custom", {
   calendar : {
     lastDay: "[yesterday at] LT",
     sameDay: "[today at] LT",
     nextDay: "[tomorrow at] LT",
-    lastWeek: "[last] dddd [at] LT",
-    nextWeek: "dddd [at] LT",
-    sameElse: "L"
+    lastWeek: "[last] dddd [at] LT"
   },
   longDateFormat : {
-    LT: "h:mm a",
-    L: "MM/DD/YYYY",
-    l: "M/D/YYYY",
-    LL: "MMMM Do YYYY",
-    ll: "MMM D YYYY",
-    LLL: "MMMM Do YYYY LT",
-    lll: "MMM D YYYY LT",
-    LLLL: "dddd, MMMM Do YYYY LT",
-    llll: "ddd, MMM D YYYY LT"
+    LT: "h:mma"
   }
 });
 
