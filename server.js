@@ -52,7 +52,7 @@ app.post("/", function(req, res, next) {
   var parts = req.body.text.split(" "),
       who = parts.shift(),
       what = parts.join(" "),
-      when = chrono.parse(what, new Date(), "PDT")[0],
+      when = chrono.parse(what)[0],
       by = req.body.user_name,
       verbs = VERBS[req.body.command];
 
@@ -68,12 +68,13 @@ app.post("/", function(req, res, next) {
                         by,
                         verbs[0],
                         verbs[1],
-                        what.slice(0, when.index - 1) + what.slice(when.index + when.text.length));
+                        what.slice(0, when.index - 1) + what.slice(when.index + when.text.length)),
+      score = when.startDate.getTime() + TZ_OFFSET;
 
   console.log("who:", who);
   console.log("what:", msg);
   console.log("when:", when);
-  console.log("score:", when.startDate.getTime());
+  console.log("score:", score, new Date(score));
 
   var reminder = {
     who: who,
@@ -83,7 +84,7 @@ app.post("/", function(req, res, next) {
   };
 
   return client.zadd(REDIS_KEY,
-                     when.startDate.getTime(),
+                     score,
                      JSON.stringify(reminder),
                      function(err, reply) {
     if (err) {
