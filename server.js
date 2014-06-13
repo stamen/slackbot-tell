@@ -16,6 +16,7 @@ var REDIS_KEY = "reminders",
     };
 
 setInterval(function() {
+  console.log("now:", new Date().getTime());
   return client.zrangebyscore(REDIS_KEY, 0, new Date().getTime(), function(err, reply) {
     if (err) {
       console.warn(err.stack);
@@ -42,19 +43,20 @@ app.post("/", function(req, res, next) {
     return res.send("um, couldn't figure out when you meant");
   }
 
-  what = util.format("%s %s me to %s you %s",
-                     by,
-                     verbs[0],
-                     verbs[1],
-                     what.slice(0, when.index - 1) + what.slice(when.index + when.text.length));
+  var msg = util.format("%s %s me to %s you %s",
+                        by,
+                        verbs[0],
+                        verbs[1],
+                        what.slice(0, when.index - 1) + what.slice(when.index + when.text.length));
 
   console.log("who:", who);
-  console.log("what:", what);
+  console.log("what:", msg);
   console.log("when:", when);
+  console.log("score:", when.startDate.getTime());
 
   var reminder = {
     who: who,
-    what: what,
+    what: msg,
     when: when,
     by: by
   };
