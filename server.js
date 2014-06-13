@@ -78,7 +78,7 @@ app.post("/", function(req, res, next) {
   var reminder = {
     who: who,
     what: msg,
-    when: when,
+    when: when.startDate(),
     by: by
   };
 
