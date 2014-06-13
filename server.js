@@ -57,7 +57,8 @@ setInterval(function() {
           token: SLACK_TOKEN,
           channel: reminder.who,
           text: reminder.what,
-          username: "slackbot"
+          username: "slackbot",
+          icon_emoji: ":triangular_flag_on_post:"
         }
       }, function(err) {
         if (err) {
