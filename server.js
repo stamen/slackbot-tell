@@ -2,7 +2,8 @@
 
 var util = require("util");
 
-var chrono = require("chrono-node"),
+var bodyParser = require("body-parser"),
+    chrono = require("chrono-node"),
     express = require("express");
 
 var app = express(),
@@ -24,6 +25,8 @@ setInterval(function() {
     console.log(reply);
   });
 }, 60e3).unref();
+
+app.use(bodyParser.urlencoded());
 
 app.post("/", function(req, res, next) {
   // TODO validate token (as a filter)
