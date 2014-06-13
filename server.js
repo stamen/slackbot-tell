@@ -56,6 +56,10 @@ app.post("/", function(req, res, next) {
       by = req.body.user_name,
       verbs = VERBS[req.body.command];
 
+  if (who === "me") {
+    who = by;
+  }
+
   if (!when) {
     return res.send("um, couldn't figure out when you meant");
   }
