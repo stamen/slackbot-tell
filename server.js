@@ -52,7 +52,7 @@ app.post("/", function(req, res, next) {
   var parts = req.body.text.split(" "),
       who = parts.shift(),
       what = parts.join(" "),
-      when = chrono.parse(what, new Date(), TZ_OFFSET)[0],
+      when = chrono.parse(what, new Date(), "PDT")[0],
       by = req.body.user_name,
       verbs = VERBS[req.body.command];
 
