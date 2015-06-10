@@ -23,5 +23,5 @@ future notifications from being delivered. Your mileage may vary.
 
 ## Environment Variables
 
-* `SLACK_TOKEN` - this is the web hook token that Slack provides when you configure a new integration
+* `SLACK_TOKEN` - this is the token that Slack provides when you configure a new slash command
 * `REDIS_URL` - a URL for an accessible Redis service (when deployed on Heroku, this involves configuring one of the many add-ons)
