@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "Slackbot reminders for other people",
   "author": "Seth Fitzsimmons <seth@mojodna.net>",
+  "repository": "stamen/slackbot-tell",
   "license": "ISC",
   "dependencies": {
     "chrono-node": "^0.1.8",
@@ -13,5 +14,8 @@
     "moment": "^2.7.0",
     "request": "^2.36.0",
     "require-env": "0.0.4"
+  },
+  "engines": {
+    "node": "4.8.4"
   }
 }
